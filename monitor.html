@@ -1,0 +1,107 @@
+<html>
+<head>
+	<title>Monitor</title>
+	<style>
+		html
+		{
+			background-color:	black;
+		}
+		
+		#header
+		{
+			color:				#00FF00;
+			font-size:			50px;
+		}
+		#mon
+		{
+			border:				1px solid white;
+		}
+	
+	</style>
+</head>
+<body>
+<div id="header">Activity Monitor</div>
+<canvas height="600" width="1200" id="mon"></canvas><br/>
+<select onChange="monitorResize();" id="monitorSize">
+	<option>Small</option>
+	<option>Medium</option>
+	<option selected>Large</option>
+</select>
+
+<script>
+
+let c = document.getElementById("mon");
+let monitor = c.getContext("2d");
+let activity = 0;
+let data = [];
+let scale = 10;
+
+function randomActivity()
+{
+	a = Math.floor(Math.random() * (10 + 1));
+	return a;
+}
+
+function monitorResize()
+{
+	let e = document.getElementById("monitorSize");
+	
+	
+	if (e.value == "Small")
+	{
+		c.width = 400;
+		c.height = 200;
+	}
+	else if (e.value == "Medium")
+	{
+		c.width = 800;
+		c.height = 400;
+	}
+	else if (e.value == "Large")
+	{
+		c.width = 1200;
+		c.height = 600;
+	}
+	
+}
+
+//main
+setInterval(pulse, 1000);
+
+function pulse()
+{	
+	//delete first data point after 60 seconds and onwards
+	if (data.length > 60)
+	{
+		data.shift();
+	}
+	
+	monitorSizeW = c.width;
+	monitorSizeH = c.height;
+	monitor60th = c.width / 60;
+	
+	let startingWidth = monitorSizeW - (data.length * monitor60th);
+	data.push(randomActivity());
+	
+	
+	//clear screen
+	monitor.clearRect(0, 0, monitorSizeW, monitorSizeH);
+
+	//begin drawing
+	monitor.beginPath();
+	monitor.moveTo(startingWidth, monitorSizeH - (data[0] * (monitorSizeH / scale)));
+	
+	for (i = 0; i < data.length ; i++)
+	{
+		monitor.lineTo(startingWidth + (i*monitor60th), monitorSizeH - (data[i] * (monitorSizeH / scale)));
+	}
+	
+	//finish drawing
+	monitor.lineWidth = 3;
+	monitor.strokeStyle = "#00FF00";
+	monitor.stroke();
+}
+
+</script>
+</body>
+</html>
