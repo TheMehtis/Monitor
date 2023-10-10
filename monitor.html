@@ -26,6 +26,7 @@
 	<option>Small</option>
 	<option>Medium</option>
 	<option selected>Large</option>
+	<option>Extra Large</option>
 </select>
 
 <script>
@@ -62,7 +63,11 @@ function monitorResize()
 		c.width = 1200;
 		c.height = 600;
 	}
-	
+	else if (e.value == "Extra Large")
+	{
+		c.width = 2400;
+		c.height = 1200;
+	}
 }
 
 //main
